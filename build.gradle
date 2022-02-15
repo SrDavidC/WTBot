@@ -1,0 +1,73 @@
+plugins {
+    id 'java'
+    id "io.freefair.lombok" version '5.3.0'
+    id 'com.github.johnrengelman.shadow' version '6.1.0'
+}
+
+group = 'WTBot'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+    //Commands Aikar
+    maven { url = "https://repo.aikar.co/content/groups/aikar/" }
+    maven { url = "https://hub.spigotmc.org/nexus/content/groups/public/" }
+
+    //Fast Inv
+    maven { url 'https://jitpack.io' }
+
+    //NMS
+    maven {url 'https://sparse.blue/maven' }
+    mavenCentral()
+
+}
+
+dependencies {
+    shadow 'com.google.code.findbugs:jsr305:3.0.2'
+    implementation("net.dv8tion:JDA:5.0.0-alpha.3")
+    implementation("co.aikar:acf-paper:0.5.0-SNAPSHOT")
+    implementation('me.chrisumb:custom-entity:1.0')
+    implementation 'fr.mrmicky:FastInv:3.0.3'
+    compileOnly 'org.spigotmc:spigot-api:1.18.1-R0.1-SNAPSHOT'
+
+}
+
+def targetJavaVersion = 8
+java {
+    def javaVersion = JavaVersion.toVersion(targetJavaVersion)
+    sourceCompatibility = "15.PREVIEW"
+    targetCompatibility = "15.PREVIEW"
+    if (JavaVersion.current() < javaVersion) {
+        toolchain.languageVersion = JavaLanguageVersion.of(targetJavaVersion)
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    if (targetJavaVersion >= 10 || JavaVersion.current().isJava10Compatible()) {
+        options.release = targetJavaVersion
+    }
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties props
+    filteringCharset 'UTF-8'
+    filesMatching('plugin.yml') {
+        expand props
+    }
+    shadowJar {
+        minimize()
+        relocate 'fr.mrmicky.fastinv', 'com.libs.fastinv'
+    }
+
+}
+build.dependsOn shadowJar
+

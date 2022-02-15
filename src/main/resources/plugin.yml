@@ -1,0 +1,14 @@
+name: WTBot
+version: '${version}'
+main: wtbot.wtbot.WTBot
+api-version: 1.18
+authors: [ SrDqrk ]
+description: A discord bot to Withering Souls
+permissions:
+  withering.*:
+    descrption: Gives access to all Withering Souls commands
+    children:
+      withering.respawn: true
+  withering.respawn:
+    description: Gives access to respawn players
+    default: op

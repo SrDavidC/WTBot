@@ -12,7 +12,7 @@ import wtbot.wtbot.utils.PlayerUtils;
 
 public final class WTBot extends JavaPlugin {
     private static WTBot pl;
-    private final String token = "OTI4MzQzMjIyODEwNDY4NDYy.YdXZAA.KHBbw-NzQyo3Kghdg98zZfEiees";
+    private final String token = "yes";
     private PlayerUtils pu;
     private FileManager fm;
     private CommandManager commandManager;
